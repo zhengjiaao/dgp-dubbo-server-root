@@ -72,7 +72,7 @@
         <maven.compiler.plugin.version>3.7.0</maven.compiler.plugin.version>
         <poi.version>3.10-FINAL</poi.version>
         <spring-mongo.version>1.10.6.RELEASE</spring-mongo.version>
-        <zookeeper.version>3.4.9</zookeeper.version>
+        <zookeeper.version>3.4.14</zookeeper.version>
         <ftpclient.version>3.5</ftpclient.version>
         <poi.version>3.17</poi.version>
         <logstash.version>4.11</logstash.version>
