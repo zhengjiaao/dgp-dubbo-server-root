@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.dist</groupId>
+    <artifactId>dgp-dubbo-server-root</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <modules>
+        <module>dgp-dubbo-server-web</module>
+        <module>dgp-dubbo-server-base</module>
+        <module>dgp-ars-server-api</module>
+        <module>dgp-ars-server-service</module>
+    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+    </dependencies>
+
+    <!-- 在这里设置打包类型为pom，作用是为了实现多模块项目 -->
+    <packaging>pom</packaging>
+
+    <!-- 第一步：添加Springboot的parent -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.10.RELEASE</version>
+        <relativePath/>
+    </parent>
+
+    <!-- 设置我们项目的一些版本属性 -->
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
+        <dubbo.version>3.0.1</dubbo.version>
+        <zkclient.version>0.10</zkclient.version>
+        <lombok.version>1.16.18</lombok.version>
+        <spring-boot.version>1.5.10.RELEASE</spring-boot.version>
+        <springfox.version>2.9.2</springfox.version>
+        <javassist.version>3.18.2-GA</javassist.version>
+        <swagger.version>1.5.21</swagger.version>
+        <jackson-annotations.version>2.8.0</jackson-annotations.version>
+        <druid.version>1.0.14</druid.version>
+        <oracle.version>11.2.0.3</oracle.version>
+        <curator-framework.version>4.0.1</curator-framework.version>
+        <dozer.version>5.4.0</dozer.version>
+        <fastjson.version>1.2.4</fastjson.version>
+        <commons-httpclient.version>3.1</commons-httpclient.version>
+        <pinyin4j.version>2.5.0</pinyin4j.version>
+        <spring-session-data-redis.version>1.3.1.RELEASE</spring-session-data-redis.version>
+        <redisson.version>3.8.0</redisson.version>
+        <commons-pool2.version>2.0</commons-pool2.version>
+        <jedis.version>2.9.0</jedis.version>
+        <maven.surefire.plugin.version>2.19.1</maven.surefire.plugin.version>
+        <commons-io.version>2.1</commons-io.version>
+        <commons-net.version>3.3</commons-net.version>
+        <json-lib.version>2.3</json-lib.version>
+        <jackson.version>2.8.8</jackson.version>
+        <okhttp.version>3.10.0</okhttp.version>
+        <dom4j.version>1.6.1</dom4j.version>
+        <jaxen.version>1.1.1</jaxen.version>
+        <jodconverter.version>4.0.0-RELEASE</jodconverter.version>
+        <jacob.version>1.18</jacob.version>
+        <org-json.version>20160810</org-json.version>
+        <maven.compiler.plugin.version>3.7.0</maven.compiler.plugin.version>
+        <poi.version>3.10-FINAL</poi.version>
+        <spring-mongo.version>1.10.6.RELEASE</spring-mongo.version>
+        <zookeeper.version>3.4.9</zookeeper.version>
+        <ftpclient.version>3.5</ftpclient.version>
+        <poi.version>3.17</poi.version>
+        <logstash.version>4.11</logstash.version>
+        <logback-classic.version>1.2.3</logback-classic.version>
+        <jsonevent-layout.version>1.7</jsonevent-layout.version>
+        <cglib.version>2.2.2</cglib.version>
+        <zip4j.version>1.3.2</zip4j.version>
+        <ant.version>1.10.2</ant.version>
+        <thumbnailator.version>0.4.8</thumbnailator.version>
+        <ehcache.version>2.8.3</ehcache.version>
+        <guava.version>20.0</guava.version>
+        <reflections.version>0.9.11</reflections.version>
+        <hutool.version>4.6.1</hutool.version>
+        <dist.adapter>1.0.0</dist.adapter>
+        <postgresql.version>42.2.5</postgresql.version>
+        <jackcess.version>2.1.7</jackcess.version>
+        <feign.version>10.5.1</feign.version>
+        <spring-boot-admin.version>1.5.7</spring-boot-admin.version>
+    </properties>
+
+
+    <!-- 声明一些项目依赖管理，方便我们的依赖版本管理 -->
+    <dependencyManagement>
+        <dependencies>
+            <!--base 公共工具 依赖-->
+            <dependency>
+                <groupId>com.dist</groupId>
+                <artifactId>dgp-dubbo-server-base</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- 辅助审查系统 ars api 接口API 依赖-->
+            <dependency>
+                <groupId>com.dist</groupId>
+                <artifactId>dgp-ars-server-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- Springboot 相关依赖 **** strat -->
+
+            <!--springboot 主依赖-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter</artifactId>
+                <version>${spring-boot.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <!-- Springboot-test依赖 -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${spring-boot.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- Springboot-web依赖 -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${spring-boot.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <!--SpringBoot Admin Server-->
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-server</artifactId>
+                <version>${spring-boot-admin.version}</version>
+            </dependency>
+            <!--SpringBoot Admin Client-->
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-client</artifactId>
+                <version>${spring-boot-admin.version}</version>
+            </dependency>
+            <!--springboot websocket-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-websocket</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <!-- Springboot 相关依赖 **** end -->
+
+            <!--spring session redis : session共享-->
+            <dependency>
+                <groupId>org.springframework.session</groupId>
+                <artifactId>spring-session-data-redis</artifactId>
+                <version>${spring-session-data-redis.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <!--redis 客户端-->
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>${jedis.version}</version>
+            </dependency>
+            <!--redis分布式锁-->
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson-spring-boot-starter</artifactId>
+                <version>${redisson.version}</version>
+            </dependency>
+
+            <!-- 使用lombok实现JavaBean的get、set、toString、hashCode、equals等方法的自动生成  -->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Dubbo依赖 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>dubbo</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
+            <!-- zookeeper的客户端依赖 -->
+            <dependency>
+                <groupId>com.101tec</groupId>
+                <artifactId>zkclient</artifactId>
+                <version>${zkclient.version}</version>
+            </dependency>
+            <!-- 内嵌式zookeeper -->
+            <dependency>
+                <groupId>org.apache.zookeeper</groupId>
+                <artifactId>zookeeper</artifactId>
+                <version>${zookeeper.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-framework</artifactId>
+                <version>${curator-framework.version}</version>
+            </dependency>
+
+            <!--swagger 相关依赖-->
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-models</artifactId>
+                <version>${swagger.version}</version>
+                <!--<scope>compile</scope>-->
+            </dependency>
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger.version}</version>
+                <!--<scope>compile</scope>-->
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${springfox.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${springfox.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>io.swagger</groupId>
+                        <artifactId>swagger-models</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>io.swagger</groupId>
+                        <artifactId>swagger-annotations</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.javassist</groupId>
+                <artifactId>javassist</artifactId>
+                <version>${javassist.version}</version>
+            </dependency>
+
+            <!--序列化/反序列化-->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson-annotations.version}</version>
+            </dependency>
+
+            <!-- dozer 对象间属性值赋值，不同属性名，借助map映射 -->
+            <dependency>
+                <groupId>net.sf.dozer</groupId>
+                <artifactId>dozer</artifactId>
+                <version>${dozer.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!--oracle数据库驱动-->
+            <dependency>
+                <groupId>com.oracle</groupId>
+                <artifactId>ojdbc6</artifactId>
+                <version>${oracle.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgresql.version}</version>
+            </dependency>
+            <!--alibaba数据库池-->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+
+            <!--alibaba Json-->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
+
+            <!--http 请求客户端-->
+            <dependency>
+                <groupId>commons-httpclient</groupId>
+                <artifactId>commons-httpclient</artifactId>
+                <version>${commons-httpclient.version}</version>
+            </dependency>
+
+            <!--okhttp 请求客户端-->
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${okhttp.version}</version>
+            </dependency>
+
+            <!--IO 流/文件操作-->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>dom4j</groupId>
+                <artifactId>dom4j</artifactId>
+                <version>${dom4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>jaxen</groupId>
+                <artifactId>jaxen</artifactId>
+                <version>${jaxen.version}</version>
+            </dependency>
+
+            <!-- FtpClient依赖包-->
+            <dependency>
+                <groupId>commons-net</groupId>
+                <artifactId>commons-net</artifactId>
+                <version>${ftpclient.version}</version>
+            </dependency>
+
+            <!-- logback 日志相关依赖-->
+            <dependency>
+                <groupId>net.logstash.logback</groupId>
+                <artifactId>logstash-logback-encoder</artifactId>
+                <version>${logstash.version}</version>
+            </dependency>
+
+            <!--反射框架-->
+            <dependency>
+                <groupId>org.reflections</groupId>
+                <artifactId>reflections</artifactId>
+                <version>${reflections.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cglib</groupId>
+                <artifactId>cglib</artifactId>
+                <version>${cglib.version}</version>
+            </dependency>
+
+            <!-- feign开始 -->
+            <dependency>
+                <groupId>io.github.openfeign</groupId>
+                <artifactId>feign-core</artifactId>
+                <version>${feign.version}</version>
+            </dependency>
+            <!--Jackson编码处理-->
+            <dependency>
+                <groupId>io.github.openfeign</groupId>
+                <artifactId>feign-jackson</artifactId>
+                <version>${feign.version}</version>
+            </dependency>
+            <!--支持JAX-RS的注解处理服务请求-->
+            <dependency>
+                <groupId>io.github.openfeign</groupId>
+                <artifactId>feign-jaxrs2</artifactId>
+                <version>${feign.version}</version>
+            </dependency>
+            <!--使用okhttp进行发送请求-->
+            <dependency>
+                <groupId>io.github.openfeign</groupId>
+                <artifactId>feign-okhttp</artifactId>
+                <version>${feign.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.openfeign</groupId>
+                <artifactId>feign-httpclient</artifactId>
+                <version>${feign.version}</version>
+            </dependency>
+            <!--使用slf4j打印日志-->
+            <dependency>
+                <groupId>io.github.openfeign</groupId>
+                <artifactId>feign-slf4j</artifactId>
+                <version>${feign.version}</version>
+            </dependency>
+
+            <!--对象池： 每次创建的对象并不实际销毁，而是缓存在对象池中，
+           下次使用的时候，不用再重新创建，直接从对象池的缓存中取即可-->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-pool2</artifactId>
+                <version>${commons-pool2.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven.compiler.plugin.version}</version>
+                    <configuration>
+                        <target>${java.version}</target>
+                        <source>${java.version}</source>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                    </configuration>
+                </plugin>
+                <!--maven打包跳过测试-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven.surefire.plugin.version}</version>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <profiles>
+        <!--开发环境-->
+        <profile>
+            <id>dev</id>
+            <properties>
+                <profile.active>dev</profile.active>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>javax.servlet-api</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </dependency>
+            </dependencies>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <!--测试环境-->
+        <profile>
+            <id>test</id>
+            <properties>
+                <profile.active>test</profile.active>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>javax.servlet-api</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+        <!--生产环境-->
+        <profile>
+            <id>prod</id>
+            <properties>
+                <profile.active>prod</profile.active>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>javax.servlet-api</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+        <!--版本打包发布环境-->
+        <profile>
+            <id>release</id>
+            <properties>
+                <profile.active>release</profile.active>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>javax.servlet-api</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+
+</project>

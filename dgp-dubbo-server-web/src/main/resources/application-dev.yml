@@ -1,0 +1,87 @@
+# 主要用来存放不同环境差异化配置，包括ftp地址、数据库连接等
+cas:
+  enable: false #是否开启cas
+  server-url-prefix: "http://127.0.0.1:8080/sso" #cas服务认证地址
+  server-login-url: "http://127.0.0.1:8080/sso" #cas服务器登录地址
+  server-name: "http://127.0.0.1:8080" #具体的应用地址
+  ignore-pattern: "/rp/*" # 不拦截的请求
+
+# 日志配置
+logging:
+  level: info
+  config: classpath:logback-spring.xml
+  app: dgp-dubbo-server-web
+  print: true #是否输出异常堆栈信息到响应体
+
+spring:
+  aop:
+    auto: true
+    proxy-target-class: true # 默认设置为false,使用的是标准Java动态代理的实现（接口），而不是cglib（类）
+  jmx:
+    default-domain: web # 指定JMX define name
+  http:
+    multipart:
+      enabled: true
+      max-file-size: 1024MB
+      max-request-size: 1024MB
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0   # 运维spring session
+    pool:
+      max-active: 16 # 连接池最大连接数（使用负值表示没有限制）
+      max-idle: 8   # 连接池中的最大空闲连接
+      min-idle: 0   # 连接池中的最小空闲连接
+      maxWait: 10000
+    redisson:
+      address: redis://${spring.redis.host}:${spring.redis.port}
+      database: ${spring.redis.database}
+  session:
+    store-type: redis
+    timeout: 86400
+  jackson:
+    default-property-inclusion: always
+  data:
+    mongodb:
+      first:
+        host: 127.0.0.1 # redis 服务器地址
+        port: 80091 # 端口
+        authentication-database: admin # 需要上授权的数据库，不然连接不上
+        database: ***  # 数据库
+        username: ***  # 用户
+        password: ***  # 密码
+      second:
+        enabled: true # 是否开启第二数据源
+        host: 127.0.0.1  # redis 服务器地址
+        port: 80092   # 端口
+        authentication-database: admin # 需要上授权的数据库，不然连接不上
+        database: ***  # 数据库
+        username: ***  # 用户
+        password: ***  # 密码
+  boot:
+    admin:
+      url: http://127.0.0.1:8086/dgp-admin-server  # springboot监控访问地址。
+      client:
+        name: dgp-server-web-nr
+        service-base-url: http://127.0.0.1:8086 # 当前服务访问IP端口
+        enabled: true # 客户端开关
+
+# springboot 保证调用 /bus/refresh的时候不需要验证
+management:
+  security:
+    enabled: false #springboot-admin，关闭安全性
+
+# dubbo 配置
+dubbo:
+  application:
+    name: consumer
+  registry:
+    address: zookeeper://127.0.0.1:2181
+  interface:
+    version: 1.0.0
+  annotation:
+    package: 'com.dist.web'  # dubbo 注解扫描包路径
+  consumer:
+    timeout: 500000 # dubbo rpc请求超时时间
+    check: false  # 是否启动检测
+    version: 1.0.0 # dubbo默认版本号，在url显示为default.version=xx

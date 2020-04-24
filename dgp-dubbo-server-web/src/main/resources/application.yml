@@ -1,0 +1,28 @@
+systemname: 国土空间规划系统
+# 主配置文件主要用来存放公共设置，不受环境配置影响
+server:
+  port: 8080
+  context-path: /web
+  session:
+    timeout: 5184000 #session 有效时间只在内置tomcnt有效
+dist:
+  cors:
+    allow: true # 是否允许跨域请求
+    mapping: "/**" # 限定的跨域资源
+    method: "*" # 允许的跨域请求方式，* 需要以单引号'
+    origin: "*" # 允许的请求域
+  encryptType: DAP4AES256 # 加密方式[DAP,MD5,DAP4AES256]
+
+# feign http调用配置
+feign:
+  connectTimeout: 10000 # 连接超时时间，单位毫秒
+  readTimeout: 240000    # 读取超时时间，单位毫秒
+  retry:
+    period: 100         # 发起当前请求的时间间隔，单位毫秒
+    maxPeriod: 1000     # 发起当前请求的最大时间间隔，单位毫秒
+    maxAttempts: 1      # 最大重试次数
+
+spring:
+  profiles:
+    active: @profile.active@ #此处由maven的环境选择决定
+

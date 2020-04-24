@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- scan: 当此属性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true -->
+<configuration scan="true">
+	<!-- 日志级别 -->
+	<springProperty scope="context" name="LOG_LEVEL" source="logging.level" defaultValue="INFOMVN "/>
+	<!-- 系统日志名称 -->
+	<springProperty scope="context" name="APP" source="logging.app" defaultValue="dgp-server-web-nr"/>
+	<property name="LOG_HOME" value="../data/dist/log/${APP}" />
+	<property name="PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%X{REVIEWTASKID}] [%X{TASKINSTANCECODE}] %-5level %logger{36} - %msg%n"/>
+	<!-- 控制台日志 ConsoleAppender -->
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<!--设置格式-->
+		<encoder>
+			<pattern>${PATTERN}</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 按照每天生成日志文件 -->
+	<appender name="file_info" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- 日志文件切片前的文件名 -->
+		<File>${LOG_HOME}/${APP}_file_info.log</File>
+		<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!--日志文件输出的文件名（切片后文件名）-->
+			<fileNamePattern>${LOG_HOME}/${APP}_file_info_%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+			<maxHistory>30</maxHistory>
+			<cleanHistoryOnStart>true</cleanHistoryOnStart>
+			<maxFileSize>20MB</maxFileSize>
+		</rollingPolicy>
+		<encoder>
+			<charset>utf-8</charset>
+			<pattern>${PATTERN}</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<!--设置过滤级别-->
+			<level>INFO</level>
+			<!--用于配置符合过滤条件的操作 符合level中的条件 则ACCEPT 写入-->
+			<onMatch>ACCEPT</onMatch>
+			<!--用于配置不符合过滤条件的操作 不符合level中的条件 则DENY 拒绝写入-->
+			<onMismatch>DENY</onMismatch>
+		</filter>
+	</appender>
+
+	<appender name="file_warn" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- 日志文件切片前的文件名 -->
+		<File>${LOG_HOME}/${APP}_file_warn.log</File>
+		<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!--日志文件输出的文件名（切片后文件名）-->
+			<fileNamePattern>${LOG_HOME}/${APP}_file_warn_%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+			<maxHistory>30</maxHistory>
+			<cleanHistoryOnStart>true</cleanHistoryOnStart>
+			<maxFileSize>20MB</maxFileSize>
+		</rollingPolicy>
+		<encoder>
+			<charset>utf-8</charset>
+			<pattern>${PATTERN}</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>WARN</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+	</appender>
+
+	<!-- ERROR日志 -->
+	<appender name="file_error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- 日志文件切片前的文件名 -->
+		<File>${LOG_HOME}/${APP}_file_error.log</File>
+		<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!--日志文件输出的文件名（切片后文件名）-->
+			<fileNamePattern>${LOG_HOME}/${APP}_file_error_%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+			<maxHistory>30</maxHistory>
+			<cleanHistoryOnStart>true</cleanHistoryOnStart>
+			<maxFileSize>20MB</maxFileSize>
+		</rollingPolicy>
+		<encoder>
+			<charset>utf-8</charset>
+			<pattern>${PATTERN}</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+	</appender>
+
+	<!--用来设置某一个包或具体的某一个类的日志打印级别，级别由yml文件进行控制-->
+	<logger name="druid.sql.Statement" level="WARN" />
+	<logger name="com.alibaba.dubbo" level="WARN"/>
+	<logger name="org.springframework" level="INFO"/>
+	<logger name="org.apache.zookeeper" level="WARN"/>
+	<logger name="feign.Logger" level="INFO"/>
+
+	<root level="info">
+		<appender-ref ref="CONSOLE"/>
+		<appender-ref ref="file_info" />
+		<appender-ref ref="file_warn" />
+		<appender-ref ref="file_error" />
+	</root>
+
+	<shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+
+</configuration>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan="true" debug="false">
+
+    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+
+    <!--定义日志文件的存储地址,使用绝对路径-->
+    <property name="APP" value="dgp-ars-server-service"/>
+    <property name="LOG_HOME" value="../data/dist/log/${APP}"/>
+    <springProperty scope="context" name="logstash.host" source="elk.logstash.host"/>
+    <property name="PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%X{REVIEWTASKID}] [%X{TASKINSTANCECODE}] [%X{REVIEWPOINTINFO}] %-5level %logger{36} - %msg%n"/>
+
+    <!-- Console 输出设置 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>utf-8</charset>
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>${PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 按照每天生成日志文件 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 日志文件切片前的文件名 -->
+        <File>${LOG_HOME}/${APP}_detail.log</File>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--日志文件输出的文件名（切片后文件名）-->
+            <fileNamePattern>${LOG_HOME}/${APP}_detail_%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+            <maxFileSize>20MB</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <charset>utf-8</charset>
+            <pattern>${PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!--输出到logstash的appender-->
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <!--可以访问的logstash日志收集端口-->
+        <destination>127.0.0.1:4560</destination>
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
+            <includeMdcKeyName>REVIEWTASKID</includeMdcKeyName>
+            <includeMdcKeyName>TASKINSTANCECODE</includeMdcKeyName>
+            <includeMdcKeyName>REVIEWPOINTINFO</includeMdcKeyName>
+        </encoder>
+    </appender>
+
+    <logger name="feign.Logger" level="DEBUG"/>
+
+    <root level="info">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="LOGSTASH"/>
+    </root>
+</configuration>

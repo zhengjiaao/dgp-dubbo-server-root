@@ -1,0 +1,16 @@
+# 主配置文件主要用来存放公共设置，不受环境配置影响，实施人员可直接忽略
+server:
+  port: 8089 # 指定端口号
+  context-path: /ars # 指定访问资源的根路径
+spring:
+  profiles:
+    active: @profile.active@ #此处由maven的环境选择决定
+
+# feign 属性配置
+feign:
+  connectTimeout: 1000000 # 连接超时时间，单位毫秒
+  readTimeout: 2000000    # 读取超时时间，单位毫秒
+  retry:
+    period: 100         # 发起当前请求的时间间隔，单位毫秒
+    maxPeriod: 1000     # 发起当前请求的最大时间间隔，单位毫秒
+    maxAttempts: 3      # 最大重试次数

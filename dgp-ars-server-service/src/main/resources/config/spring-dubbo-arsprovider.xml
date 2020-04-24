@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://code.alibabatech.com/schema/dubbo
+       http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- ************************ Dubbo 配置类：提供者 *********************** -->
+
+    <!-- 引入资源: *.yml配置文件 -->
+    <context:property-placeholder location="classpath:application*.yml" ignore-unresolvable="true"/>
+    <!--名称：不限制 -->
+    <dubbo:application name="${dubbo.application.name}"/>
+    <!-- 注册中心地址：zookeeper所在服务器的ip地址 -->
+    <dubbo:registry address="${dubbo.registry.address}"  file="${dubbo.registry.file}"/>
+    <!-- dubbo协议端口：可更改，缺省端口20880，多个提供者会冲突-->
+    <dubbo:protocol name="dubbo" port="${dubbo.protocol.port}" />
+    <!-- 扫描注解包路径: 多个包用逗号分隔，不填pacakge表示扫描当前ApplicationContext中所有的类 -->
+    <dubbo:annotation package="${dubbo.annotation.package}"/>
+    <!--dubbo提供者：接口注册版本，过滤器，rpc接口请求超时时间-->
+    <!--dubbo消费者：接口注册版本，是否开启检测，rpc接口请求超时时间-->
+    <dubbo:consumer version="${dubbo.consumer.version}" check="false" timeout="300000" />
+
+</beans>
