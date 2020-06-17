@@ -24,6 +24,6 @@
     <dubbo:annotation package="${dubbo.annotation.package}"/>
     <!--dubbo提供者：接口注册版本，过滤器，rpc接口请求超时时间-->
     <!--dubbo消费者：接口注册版本，是否开启检测，rpc接口请求超时时间-->
-    <dubbo:consumer version="${dubbo.consumer.version}" check="false" timeout="300000" />
+    <dubbo:provider version="${dubbo.provider.version}" timeout="300000" />
 
 </beans>

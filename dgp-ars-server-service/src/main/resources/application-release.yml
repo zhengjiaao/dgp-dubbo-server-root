@@ -82,10 +82,8 @@ dubbo:
   protocol:
     port: 40001
   annotation:
-    package: 'com.dist.ars.service,com.dist.ars.manager.remote'
+    package: 'com.dist.ars.service'
   provider: # 提供者服务版本
-    version: 1.0.0
-  consumer: # 消费者服务版本
     version: 1.0.0
 
 # feign配置：请求路径
